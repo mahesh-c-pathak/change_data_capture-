@@ -62,7 +62,7 @@ Here we are going to use containerized MySQL.
 3. Navigate to the project directory:
     
    ```
-   cd airflow 
+   cd mysql 
    ```
 4. Run Docker Compose to spin up the services:
    
