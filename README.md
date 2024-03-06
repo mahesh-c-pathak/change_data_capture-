@@ -50,22 +50,40 @@ description=”Bq Table to Store CloudSql Employee Table data”
 
 Here we are going to use containerized MySQL.  
 1. Clone the repository:
+   
    ```
    git clone https://github.com/mahesh-c-pathak/change_data_capture-.git
    ```
+2. Install the requiered python libraries
+    
+   ```
+   pip install -r requirements.txt
+   ```
 3. Navigate to the project directory:
+    
    ```
    cd airflow 
    ```
-5. Run Docker Compose to spin up the services:
+4. Run Docker Compose to spin up the services:
+   
    ```
    docker-compose up
    ```
-6. Run mysql_insert_data.py to insert records in the MySQL instance
+5. Run mysql_insert_data.py to insert records in the MySQL instance
+    
    ```
    python3 mysql_insert_data.py
    ```
-8. Enable “BigQuery Connection API”, “BigQuery Data Transfer API” and grant bigquery.admin role:
+6. Enable “BigQuery Connection API”, “BigQuery Data Transfer API” and grant bigquery.admin role:
+
+7. Run the bigquery_setup.py.
+    * create datset
+    * create table
+    * Insert an initial (first time) lower limit date to the BigQuery table to start the first and subsequent dates incremental loads from source MySQL table to BigQuery table.  
+
+   ```
+   python3 bigquery_setup.py
+   ```
 
 ## Solution for implementing this incremental load problem:
 
