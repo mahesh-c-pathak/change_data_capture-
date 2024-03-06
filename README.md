@@ -80,7 +80,6 @@ Here we are going to use containerized MySQL.
     * create datset
     * create table
     * Insert an initial (first time) lower limit date to the BigQuery table to start the first and subsequent dates incremental loads from source MySQL table to BigQuery table.
-
   
    ```
    python3 bigquery_setup.py
@@ -90,7 +89,7 @@ Here we are going to use containerized MySQL.
 Run the mysql_to_bigquery_incremental_upload.py. The Python Script 
  * Query the bigquery table for max uploaded date
  * Then Query the mysql table for incremental rows, viz rows greater than max uploaded date in bigquery
- * Then inserts incremental rows in the bigquery table. <\n />
+ * Then inserts incremental rows in the bigquery table. 
 
  ```
  python3 mysql_to_bigquery_incremental_upload.py
