@@ -1,4 +1,4 @@
-# change_data_capture
+# Change_Data_Capture (CDC)
 
 The project is going to explore change_data_capture technique to incrementally load data from  Transactional processing system to Analytical processing system.  
 Any new transactions or changes in the earlier transactions in an RDBMS transactional processing system are called incremental records.  
@@ -79,11 +79,23 @@ Here we are going to use containerized MySQL.
 7. Run the bigquery_setup.py.
     * create datset
     * create table
-    * Insert an initial (first time) lower limit date to the BigQuery table to start the first and subsequent dates incremental loads from source MySQL table to BigQuery table.  
+    * Insert an initial (first time) lower limit date to the BigQuery table to start the first and subsequent dates incremental loads from source MySQL table to BigQuery table.
 
+  
    ```
    python3 bigquery_setup.py
    ```
 
 ## Solution for implementing this incremental load problem:
+Run the mysql_to_bigquery_incremental_upload.py. The Python Script 
+ * Query the bigquery table for max uploaded date
+ * Then Query the mysql table for incremental rows, viz rows greater than max uploaded date in bigquery
+ * Then inserts incremental rows in the bigquery table. <\n />
+
+ ```
+ python3 mysql_to_bigquery_incremental_upload.py
+ ```
+   This python file uses pandas to create a dataframe using incremental rows from MySQL. Then uses 'pandas-gbq' module to upload the data to bigquery table.
+   This task can be automated and scheduled by airflow or cron-job to run at specified inteerval.
+
 
