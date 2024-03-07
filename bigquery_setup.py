@@ -6,9 +6,9 @@
 
 from google.cloud import bigquery
 
-project_id = 'your project name'
-dataset_name = 'mydataset'
-table_name = 'employee_info_raw'
+project_id = 'your project name' # Enter your project name here
+dataset_name = 'your dataset name'  # Enter your dataset name here
+table_name = 'your table name'  # Enter your table name
 table_id = f'{dataset_name}.{table_name}'
 
 # Create a BigQuery client.
