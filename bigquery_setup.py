@@ -9,29 +9,30 @@ from google.cloud import bigquery
 project_id = 'your project name'
 dataset_name = 'mydataset'
 table_name = 'employee_info_raw'
-table_id = 'mydataset.employee_info_raw'
+table_id = f'{dataset_name}.{table_name}'
 
 # Create a BigQuery client.
 client = bigquery.Client(project=project_id)
 
 # create datset if not exists.
-def create_dataset_bigquery(client):
+def create_dataset_bigquery(client, dataset_name):
   try :
-    query = """
-    CREATE SCHEMA IF NOT EXISTS mydataset 
+    query = f"""
+    CREATE SCHEMA IF NOT EXISTS {dataset_name} 
     OPTIONS(
       location="us"
       )
     """
     results = client.query(query).result()
+    print("Dataset created")
   except Exception as e:
     print(f"Dataset could not be created, an error occured: {e}")
 
 # create table if not exists
-def create_table_bigquery(client):
+def create_table_bigquery(client, table_id):
   try:
-    query = """
-    CREATE TABLE IF NOT EXISTS mydataset.employee_info_raw (
+    query = f"""
+    CREATE TABLE IF NOT EXISTS {table_id} (
     id INT64,
     name STRING,
     job_title STRING,
@@ -44,14 +45,16 @@ def create_table_bigquery(client):
     ); 
     """
     results = client.query(query).result()
+    print("Table created")
   except Exception as e:
     print(f"Table could not be created, an error occured: {e}")
 
+
  # insert values in the table.
-def insert_data_bigquery(client):
+def insert_data_bigquery(client, table_id):
   try:
-    query = """
-    INSERT `mydataset.employee_info_raw` (id, name, job_title, working_location, working_status, insert_update_date )
+    query = f"""
+    INSERT {table_id}
     VALUES (1, 'sachin', 'SE', 'pune, India', 'working', '1900-01-01')
     """
     results = client.query(query).result()
@@ -59,12 +62,12 @@ def insert_data_bigquery(client):
   except Exception as e:
     print(f"Data could not be inserted, an error occured: {e}")
 
-# Query the bigquery table for max uploaded date
-def get_bigquery_data(client):
+# Query the bigquery table 
+def get_bigquery_data(client, table_id):
   try:
-    query = """
+    query = f"""
     SELECT *
-    FROM `gcs-pipeline.demo_dataset.demo_table`
+    FROM {table_id}
     """
     results = client.query(query).result()
     # Print the results.
@@ -74,10 +77,10 @@ def get_bigquery_data(client):
     print("Unable to query result, an error ocurred: {e}")
 
 if __name__== "__main__":
-    create_dataset_bigquery(client)
-    create_table_bigquery(client)
-    insert_data_bigquery(client)
-    get_bigquery_data(client)
+    create_dataset_bigquery(client, dataset_name)
+    create_table_bigquery(client, table_id)
+    insert_data_bigquery(client, table_id)
+    get_bigquery_data(client, table_id)
 
 
 
