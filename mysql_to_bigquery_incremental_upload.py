@@ -11,9 +11,9 @@ import pandas as pd
 from collections import OrderedDict
 import pandas_gbq
 
-project_id = 'gcs-pipeline'
-dataset_name = 'mydataset'
-table_name = 'employee_info_raw'
+project_id = 'your project name'
+dataset_name = 'your dataset name'
+table_name = 'your table name'
 table_id = f'{dataset_name}.{table_name}'
 
 # Create a BigQuery client.
