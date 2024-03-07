@@ -6,35 +6,38 @@
 
 import mysql.connector as mysql
 from google.cloud import bigquery
+import json
 import pandas as pd
+from collections import OrderedDict
 import pandas_gbq
 
 project_id = 'gcs-pipeline'
 dataset_name = 'mydataset'
 table_name = 'employee_info_raw'
-table_id = 'mydataset.employee_info_raw'
+table_id = f'{dataset_name}.{table_name}'
 
 # Create a BigQuery client.
 client = bigquery.Client(project=project_id)
 
 # create datset if not exists.
-def create_dataset_bigquery(client):
+def create_dataset_bigquery(client, dataset_name):
   try :
-    query = """
-    CREATE SCHEMA IF NOT EXISTS mydataset 
+    query = f"""
+    CREATE SCHEMA IF NOT EXISTS {dataset_name} 
     OPTIONS(
       location="us"
       )
     """
     results = client.query(query).result()
+    print("Dataset created")
   except Exception as e:
     print(f"Dataset could not be created, an error occured: {e}")
 
 # create table if not exists
-def create_table_bigquery(client):
+def create_table_bigquery(client, table_id):
   try:
-    query = """
-    CREATE TABLE IF NOT EXISTS mydataset.employee_info_raw (
+    query = f"""
+    CREATE TABLE IF NOT EXISTS {table_id} (
     id INT64,
     name STRING,
     job_title STRING,
@@ -47,17 +50,18 @@ def create_table_bigquery(client):
     ); 
     """
     results = client.query(query).result()
+    print("Table created")
   except Exception as e:
     print(f"Table could not be created, an error occured: {e}")
 
 
 
 # Query the bigquery table for max uploaded date
-def get_latest_date(client):
+def get_latest_date(client, table_id):
   try:
-    query = """
+    query = f"""
     SELECT MAX(insert_update_date)
-    FROM `mydataset.employee_info_raw`
+    FROM {table_id}
     """
     results = client.query(query).result()
     # Print the results.
@@ -93,9 +97,20 @@ def insert_data_bigquery(new_records, project_id, table_id) :
     print(f"Data could not be inserted, an error occured: {e}")
 
 if __name__== "__main__":
-    create_dataset_bigquery(client)
-    create_table_bigquery(client)
-    latest_date = get_latest_date(client)
+    create_dataset_bigquery(client, dataset_name)
+    create_table_bigquery(client, table_id)
+    latest_date = get_latest_date(client, table_id)
     new_records = incremental_load(latest_date)
     insert_data_bigquery(new_records,project_id, table_id)
     print("Data uploaded to bigquery")
+    
+
+
+ 
+    
+        
+    
+
+
+
+
