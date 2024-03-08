@@ -42,7 +42,7 @@ working_status STRING,
 insert_update_date DATE)
 PARTITION BY insert_update_date
 OPTIONS(
-description=”Bq Table to Store CloudSql Employee Table data”
+description=”Bq Table to Store MySql Employee Table data”
 );  
 ```
 
